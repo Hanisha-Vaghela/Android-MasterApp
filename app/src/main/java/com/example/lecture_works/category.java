@@ -46,12 +46,16 @@ public class category extends AppCompatActivity {
         categoryRV = findViewById(R.id.category);
 
         for(int i = 0; i<idArray.length;i++){
-            String checkCategory = "SELECT * FROM category WHERE name = '"+nameArray[i]+"' ";
-            Cursor cursor = db.rawQuery(checkCategory,null);
-            if(cursor.getCount() == 0){
-                String insertCategory = "INSERT INTO category VALUES(NULL, '"+nameArray[i]+"', '"+imageArray[i]+"' )";
+            String checkCategory = "SELECT * FROM category WHERE categoryid = '"+idArray[i]+"' OR name = '"+nameArray[i]+"' ";
+            Cursor checkCursor = db.rawQuery(checkCategory,null);
+            if(checkCursor.getCount() == 0){
+                String insertCategory = "INSERT INTO category VALUES('"+idArray[i]+"', '"+nameArray[i]+"', '"+imageArray[i]+"' )";
                 db.execSQL(insertCategory);
+            } else {
+                String updateCategory = "UPDATE category SET name = '"+nameArray[i]+"', image = '"+imageArray[i]+"' WHERE categoryid = '"+idArray[i]+"'";
+                db.execSQL(updateCategory);
             }
+            checkCursor.close();
         }
         arraylist = new ArrayList<>();
 
@@ -66,6 +70,7 @@ public class category extends AppCompatActivity {
                 arraylist.add(list);
             }
         }
+        cursor.close();
 
 
 //        categoryRV.setLayoutManager(new LinearLayoutManager(category.this));

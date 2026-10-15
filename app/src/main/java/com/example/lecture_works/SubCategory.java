@@ -51,17 +51,31 @@ public class SubCategory extends AppCompatActivity {
         subcategoryRV = findViewById(R.id.subcategoryRV);
 
         for(int i = 0; i<subidArray.length;i++){
-            String checkCategory = "SELECT * FROM subcategory WHERE name = '"+subnameArray[i]+"' ";
+            String checkCategory = "SELECT * FROM subcategory WHERE subcategoryid = '"+subidArray[i]+"' OR name = '"+subnameArray[i]+"' ";
             Cursor cursor = db.rawQuery(checkCategory,null);
             if(cursor.getCount() == 0){
-                String insertsubCategory = "INSERT INTO subcategory VALUES(NULL, '"+catidArray[i]+"', '"+subnameArray[i]+"', '"+imageArray[i]+"' )";
+                String insertsubCategory = "INSERT INTO subcategory VALUES('"+subidArray[i]+"', '"+catidArray[i]+"', '"+subnameArray[i]+"', '"+imageArray[i]+"' )";
                 db.execSQL(insertsubCategory);
+            } else {
+                String updateSubCategory = "UPDATE subcategory SET categoryid = '"+catidArray[i]+"', name = '"+subnameArray[i]+"', image = '"+imageArray[i]+"' WHERE subcategoryid = '"+subidArray[i]+"'";
+                db.execSQL(updateSubCategory);
             }
+            cursor.close();
         }
 
         arraylist = new ArrayList<>();
 
-        String fetchCategory = "SELECT * FROM subcategory WHERE categoryid = '"+sp.getInt(contantSp.CATEGORY_ID,0)+"'  ";
+        int categoryId = getIntent().getIntExtra(contantSp.CATEGORY_ID, sp.getInt(contantSp.CATEGORY_ID, 0));
+        if (categoryId != 0) {
+            sp.edit().putInt(contantSp.CATEGORY_ID, categoryId).apply();
+        }
+
+        String fetchCategory;
+        if (categoryId == 0) {
+            fetchCategory = "SELECT * FROM subcategory";
+        } else {
+            fetchCategory = "SELECT * FROM subcategory WHERE categoryid = '" + categoryId + "' ";
+        }
         Cursor subCatcursor = db.rawQuery(fetchCategory,null);
 
         if(subCatcursor.getCount()>0){
@@ -72,10 +86,10 @@ public class SubCategory extends AppCompatActivity {
                 list.setSubname(subCatcursor.getString(2));
                 list.setSubimage(subCatcursor.getInt(3));
 
-
                 arraylist.add(list);
             }
         }
+        subCatcursor.close();
 
         subcategoryRV.setLayoutManager(new StaggeredGridLayoutManager(1,StaggeredGridLayoutManager.VERTICAL));
         subcategoryAdapter adapter = new subcategoryAdapter(SubCategory.this,arraylist);

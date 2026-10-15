@@ -68,12 +68,14 @@ public class categoryAdapter extends RecyclerView.Adapter<categoryAdapter.ViewHo
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sp.edit().putInt(contantSp.CATEGORY_ID,arrayList.get(position).getId()).commit();
-//                        startActivity(new Intent(categoryAdapter.this,SubCategory.class));
+                int pos = holder.getAdapterPosition();
+                if (pos == RecyclerView.NO_POSITION) return;
+                int catId = arrayList.get(pos).getId();
+                sp.edit().putInt(contantSp.CATEGORY_ID, catId).commit();
                 Intent intent = new Intent(context, SubCategory.class);
+                intent.putExtra(contantSp.CATEGORY_ID, catId);
                 context.startActivity(intent);
             }
-
         });
     }
 

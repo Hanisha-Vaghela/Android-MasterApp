@@ -14,8 +14,14 @@
         android:supportsRtl="true"
         android:theme="@style/Base.Theme.Lecture_works">
         <activity
-            android:name=".ProductActivity"
-            android:exported="false" />
+            android:name=".splashScreen"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".product_details"
             android:exported="false" />
@@ -41,14 +47,8 @@
             android:name=".dashboard"
             android:exported="false" />
         <activity
-            android:name=".splashScreen"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:name=".ProductActivity"
+            android:exported="false" />
 
         <meta-data
             android:name="preloaded_fonts"

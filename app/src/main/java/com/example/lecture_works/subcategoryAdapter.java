@@ -51,10 +51,15 @@ public subcategoryAdapter(Context context, ArrayList<SubCategoryList> arrayList)
         holder.subimage.setImageResource(arrayList.get(position).getSubimage());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
-
+            @Override
             public void onClick(View view) {
-                sp.edit().putInt(contantSp.SUBCATEGORY_ID, arrayList.get(position).getSubid()).apply();
-                context.startActivity(new Intent(context, ProductActivity.class));
+                int pos = holder.getAdapterPosition();
+                if (pos == RecyclerView.NO_POSITION) return;
+                int subcatId = arrayList.get(pos).getSubid();
+                sp.edit().putInt(contantSp.SUBCATEGORY_ID, subcatId).commit();
+                Intent intent = new Intent(context, ProductActivity.class);
+                intent.putExtra(contantSp.SUBCATEGORY_ID, subcatId);
+                context.startActivity(intent);
             }
         });
     }

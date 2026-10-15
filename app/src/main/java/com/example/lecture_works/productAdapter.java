@@ -30,52 +30,68 @@ public class productAdapter extends RecyclerView.Adapter<productAdapter.ViewHold
         sp = context.getSharedPreferences(contantSp.PREF, Context.MODE_PRIVATE);
 
     }
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView name;
         ImageView image;
         TextView originalprice;
         TextView disscountprice;
+        TextView description;
+        TextView badge;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.product_name);
             image = itemView.findViewById(R.id.product_image);
             originalprice = itemView.findViewById(R.id.product_original_price);
             disscountprice = itemView.findViewById(R.id.product_discounted_price);
+            description = itemView.findViewById(R.id.product_description);
+            badge = itemView.findViewById(R.id.product_badge);
         }
     }
 
     @NonNull
     @Override
     public productAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.product_item,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.product_item, parent, false);
         return new productAdapter.ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull productAdapter.ViewHolder holder, int position) {
-//    holder.name.setText(nameArray[position]);
-//    holder.image.setImageResource(imageArray[position]);
-//    ProductList item = arrayList.get(position);
+        ProductList item = arrayList.get(position);
 
-        holder.name.setText(arrayList.get(position).getProductname());
-        holder.image.setImageResource(arrayList.get(position).getProductimage());
-        holder.disscountprice.setText(String.valueOf(arrayList.get(position).getProductname()));
-        holder.originalprice.setText(String.valueOf(arrayList.get(position).getProductname()));
+        holder.name.setText(item.getProductname());
+        holder.image.setImageResource(item.getProductimage());
+        holder.disscountprice.setText("₹" + item.getDisscountprice());
+        holder.originalprice.setText("₹" + item.getOriginalprice());
+        holder.originalprice.setPaintFlags(holder.originalprice.getPaintFlags() | android.graphics.Paint.STRIKE_THRU_TEXT_FLAG);
+
+        if (holder.description != null && item.getDescription() != null) {
+            holder.description.setText(item.getDescription());
+        }
+
+        if (holder.badge != null && item.getProductdiscount() != null && !item.getProductdiscount().isEmpty()) {
+            holder.badge.setText(item.getProductdiscount());
+            holder.badge.setVisibility(View.VISIBLE);
+        }
 
         holder.itemView.setOnClickListener(view -> {
+            int pos = holder.getAdapterPosition();
+            if (pos == RecyclerView.NO_POSITION) return;
+            ProductList selected = arrayList.get(pos);
+
             sp.edit()
-//                    .putInt(contantSp.PREF,arrayList.get(position).getProductid()).apply();
-                    .putInt(contantSp.PRODUCT_ID,arrayList.get(position).getProductid())
-                    .putString(contantSp.PRODUCT_NAME,arrayList.get(position).getProductname())
-                    .putInt(contantSp.PRODUCT_IMG,arrayList.get(position).getProductimage())
-                    .putInt(contantSp.ORIGINAL_PRICE,arrayList.get(position).getOriginalprice())
-                    .putInt(contantSp.DISSCOUNT_PRICE,arrayList.get(position).getDisscountprice())
-                    .putString(contantSp.DESCRIPTION,arrayList.get(position).getDescription())
-                    .putString(contantSp.WISHLIST,arrayList.get(position).getWishlist())
-                    .putString(contantSp.PRODUCT_DISSCOUNT,arrayList.get(position).getProductdiscount())
-                    .apply();
-            Intent intent = new Intent(context,product_details.class);
+                    .putInt(contantSp.PRODUCT_ID, selected.getProductid())
+                    .putString(contantSp.PRODUCT_NAME, selected.getProductname())
+                    .putInt(contantSp.PRODUCT_IMG, selected.getProductimage())
+                    .putInt(contantSp.ORIGINAL_PRICE, selected.getOriginalprice())
+                    .putInt(contantSp.DISSCOUNT_PRICE, selected.getDisscountprice())
+                    .putString(contantSp.DESCRIPTION, selected.getDescription())
+                    .putString(contantSp.PRODUCT_DISSCOUNT, selected.getProductdiscount())
+                    .commit();
+
+            Intent intent = new Intent(context, product_details.class);
             context.startActivity(intent);
         });
     }
