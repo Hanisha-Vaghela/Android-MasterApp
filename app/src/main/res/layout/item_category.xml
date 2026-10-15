@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
+        app:cardCornerRadius="@dimen/_10sdp"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:layout_marginVertical="@dimen/_20sdp">
+
+        <!-- Full-width background image, like the sample -->
+        <ImageView
+            android:id="@+id/category_image"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_90sdp"
+            android:scaleType="centerCrop"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_90sdp"
+            android:orientation="vertical"
+            android:gravity="center_vertical"
+            android:layout_margin="@dimen/_10sdp"
+            >
+
+            <TextView
+                android:id="@+id/category_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_margin="@dimen/_8sdp"
+                android:fontFamily="@font/battambang"
+                android:text="Category Name"
+                android:textSize="@dimen/_18sdp"
+                android:textStyle="bold" />
+
+            <!-- Subtitle under the name -->
+            <TextView
+                android:id="@+id/category_subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginHorizontal="@dimen/_8sdp"
+                android:fontFamily="@font/battambang"
+                android:text="Stylish &amp; Functional"
+                android:textSize="@dimen/_10sdp" />
+
+        </LinearLayout>
+
+        <!-- Round arrow button on the right -->
+<!--        <androidx.cardview.widget.CardView-->
+<!--            android:layout_width="@dimen/_26sdp"-->
+<!--            android:layout_height="@dimen/_26sdp"-->
+<!--            android:layout_gravity="end|center_vertical"-->
+<!--            android:layout_marginEnd="@dimen/_14sdp"-->
+<!--            android:backgroundTint="@color/white"-->
+<!--            app:cardCornerRadius="@dimen/_13sdp">-->
+
+<!--            <ImageView-->
+<!--                android:id="@+id/category_arrow"-->
+<!--                android:layout_width="@dimen/_14sdp"-->
+<!--                android:layout_height="@dimen/_14sdp"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:src="@drawable/bag" />-->
+
+<!--        </androidx.cardview.widget.CardView>-->
+
+    </androidx.cardview.widget.CardView>
+
+
+</LinearLayout>
