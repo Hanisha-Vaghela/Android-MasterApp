@@ -12,30 +12,30 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import java.util.ArrayList;
 
-public class Product extends AppCompatActivity {
+public class ProductActivity extends AppCompatActivity {
 
     RecyclerView product;
     SQLiteDatabase db;
     ArrayList<ProductList> arrayList;
     SharedPreferences sp;
     int[] productidArray = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21};
-//    int[] productCatidArray = {6,6,6,2,2,5,6,6,10,10,6,1,3,4,6,8,7,7,3,1,1};
-int[] productCatidArray = {
-        6, 6, 6,   // Tote, Sling, Mini -> Backpacks
-        2, 2,      // Flat sandals, hiking sandals -> sendal
-        5,         // Buds -> Wireless Headphones
-        0, 0,      // Notebook, PenSet -> no subcategory yet
-        10, 10,    // Foldable Phones, Iphone -> Mobiles
-        0,         // Water Bottle -> no subcategory yet
-        1,         // Sneakers -> shoes
-        3,         // Analog Watch -> Smart Watches
-        4,         // Camera -> DSLR Cameras
-        11,        // Diary -> book subcategory
-        8, 8,      // formal shirt, formal top -> shirts
-        7,         // plain tshirt -> T-Shirts
-        3,         // titan watch -> Smart Watches
-        1, 1       // Oxford shoes, formal shoes -> shoes
-};
+        int[] SubCatidArray = {6,6,6,2,2,5,6,6,10,10,6,1,3,4,6,8,7,7,3,1,1};
+//    int[] productCatidArray = {
+//            6, 6, 6,   // Tote, Sling, Mini -> Backpacks
+//            2, 2,      // Flat sandals, hiking sandals -> sendal
+//            5,         // Buds -> Wireless Headphones
+//            0, 0,      // Notebook, PenSet -> no subcategory yet
+//            10, 10,    // Foldable Phones, Iphone -> Mobiles
+//            0,         // Water Bottle -> no subcategory yet
+//            1,         // Sneakers -> shoes
+//            3,         // Analog Watch -> Smart Watches
+//            4,         // Camera -> DSLR Cameras
+//            11,        // Diary -> book subcategory
+//            8, 8,      // formal shirt, formal top -> shirts
+//            7,         // plain tshirt -> T-Shirts
+//            3,         // titan watch -> Smart Watches
+//            1, 1       // Oxford shoes, formal shoes -> shoes
+//    };
     String[] nameArray = {
             "Tote Bag", //1
             "Sling Bag", //2
@@ -162,7 +162,7 @@ int[] productCatidArray = {
             Cursor cursor = db.rawQuery(checkProduct,null);
             if(cursor.getCount() == 0){
 //                String insertProduct = "INSERT INTO product VALUES(NULL,'"+productCatidArray[i]+"', '"+nameArray[i]+"', '"+imageArray[i]+"', '"+discountedPricesArray+"','"+originalPricesArray+"' )";
-                String insertProduct = "INSERT INTO product VALUES(NULL,'"+productCatidArray[i]+"', '"+nameArray[i]+"', '"+imageArray[i]+"', '"+discountedPricesArray[i]+"','"+originalPricesArray[i]+"')";
+                String insertProduct = "INSERT INTO product VALUES(NULL,'"+SubCatidArray[i]+"', '"+nameArray[i]+"', '"+imageArray[i]+"', '"+discountedPricesArray[i]+"','"+originalPricesArray[i]+"')";
                 db.execSQL(insertProduct);
 
             }
@@ -186,9 +186,9 @@ int[] productCatidArray = {
             while (cursor.moveToNext()){
                 ProductList list = new ProductList();
                 list.setProductid(cursor.getInt(0));
-                list.setSubcatid(cursor.getInt(1));
-                list.setName(cursor.getString(2));
-                list.setImage(cursor.getInt(3));
+//                list.setSubcatid(cursor.getInt(1));
+                list.setProductname(cursor.getString(2));
+                list.setProductimage(cursor.getInt(3));
                 list.setDisscountprice(cursor.getInt(4));
                 list.setOriginalprice(cursor.getInt(5));
 
@@ -198,7 +198,7 @@ int[] productCatidArray = {
 
         product.setLayoutManager(new StaggeredGridLayoutManager(1,StaggeredGridLayoutManager.VERTICAL));
 
-        productAdapter adapter = new productAdapter(Product.this,arrayList);
+        productAdapter adapter = new productAdapter(ProductActivity.this,arrayList);
         product.setAdapter(adapter);
 
     }

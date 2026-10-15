@@ -51,11 +51,13 @@ public class product_details extends AppCompatActivity {
         productdiscount = findViewById(R.id.product_detail_discount);
         buynow = findViewById(R.id.buy_now);
 
+        // ahiyan aapde jaate value set akriye chhiye , naa ke arrayList mathi laaviye chhiye ,
+        // to jate set karvani hoy tyare default value int mate 0 aapvani hoy and String mate "".
         detailimage.setImageResource(sp.getInt(contantSp.PRODUCT_IMG,0));
-        productdetailname.setText(sp.getString(contantSp.PRODUCT_NAME,1));
-        productdiscountprice.setText(sp.getInt(contantSp.DISSCOUNT_PRICE,2));
-        productrealprice.setText(sp.getInt(contantSp.ORIGINAL_PRICE,3));
-        productdiscount.setText(sp.getString(contantSp.PRODUCT_DISSCOUNT ,4));
+        productdetailname.setText(sp.getString(contantSp.PRODUCT_NAME,""));
+        productdiscountprice.setText(sp.getInt(contantSp.DISSCOUNT_PRICE,0));
+        productrealprice.setText(sp.getInt(contantSp.ORIGINAL_PRICE,0));
+        productdiscount.setText(sp.getString(contantSp.PRODUCT_DISSCOUNT ,""));
 
     }
 }

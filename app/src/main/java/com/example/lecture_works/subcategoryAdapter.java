@@ -50,29 +50,43 @@ public subcategoryAdapter(Context context, ArrayList<SubCategoryList> arrayList)
         holder.subname.setText(arrayList.get(position).getSubname());
         holder.subimage.setImageResource(arrayList.get(position).getSubimage());
 
-        holder.itemView.setOnClickListener(view ->{
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
 
-            sp.edit().putInt(contantSp.SUBCATEGORY_ID,arrayList.get(position).getSubid()).apply();
-//            context.startActivity(new Intent(context,Product.class));
-            Intent intent = new Intent(context, Product.class);
-            context.startActivity(intent);
+            public void onClick(View view) {
+                sp.edit().putInt(contantSp.SUBCATEGORY_ID, arrayList.get(position).getSubid()).apply();
+                context.startActivity(new Intent(context, ProductActivity.class));
+            }
         });
+    }
 
+//        public void onBindViewHolder (@NonNull subcategoryAdapter.ViewHolder holder,int position){
+////        SubCategoryList item = arrayList.get(position);
 //
-//@Override
-//public void onBindViewHolder(@NonNull subcategoryAdapter.ViewHolder holder, int position) {
-//    holder.subname.setText(arrayList.get(position).getSubname());
-//    holder.subimage.setImageResource(arrayList.get(position).getSubimage());
+//            holder.subname.setText(arrayList.get(position).getSubname());
+//            holder.subimage.setImageResource(arrayList.get(position).getSubimage());
 //
-//    holder.itemView.setOnClickListener(view -> {
-//        int pos = holder.getAdapterPosition();
-//        Log.d("SUB_CLICK", "clicked id = " + arrayList.get(pos).getSubid());
-//        Toast.makeText(context, "clicked", Toast.LENGTH_SHORT).show();
+//            holder.itemView.setOnClickListener(view -> {
+//                int pos = holder.getAdapterPosition();
 //
-//        sp.edit().putInt(contantSp.SUBCATEGORY_ID, arrayList.get(pos).getSubid()).apply();
-//        context.startActivity(new Intent(context, Product.class));
-//    });
-}
+//                if (pos == RecyclerView.NO_POSITION) {
+//                    return;
+//                }
+//
+//                SubCategoryList item = arrayList.get(pos);
+//
+//                int subcategoryId = item.getSubid();
+//
+//                sp.edit()
+//                        .putInt(contantSp.SUBCATEGORY_ID, subcategoryId)
+//                        .apply();
+//
+//                Log.d("SUB_CLICK", "Subcategory ID: " + subcategoryId);
+//
+//                Intent intent = new Intent(context, ProductActivity.class);
+//                context.startActivity(intent);
+//            });
+//        }
+
 
     @Override
     public int getItemCount() {

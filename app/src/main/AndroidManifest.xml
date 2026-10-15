@@ -14,10 +14,10 @@
         android:supportsRtl="true"
         android:theme="@style/Base.Theme.Lecture_works">
         <activity
-            android:name=".product_details"
+            android:name=".ProductActivity"
             android:exported="false" />
         <activity
-            android:name=".Product"
+            android:name=".product_details"
             android:exported="false" />
         <activity
             android:name=".SubCategory"

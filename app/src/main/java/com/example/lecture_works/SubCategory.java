@@ -38,7 +38,7 @@ public class SubCategory extends AppCompatActivity {
 
         sp = getSharedPreferences(contantSp.PREF,MODE_PRIVATE);
 
-        db = openOrCreateDatabase("lecture_works",MODE_PRIVATE,null);
+        db = openOrCreateDatabase(contantSp.PREF,MODE_PRIVATE,null);
         String UserTable = "CREATE TABLE IF NOT EXISTS User(userid integer PRIMARY KEY AUTOINCREMENT,name VARCHAR(50),email VARCHAR(30),contact VARCHAR(10),password VARCHAR(20))";
         db.execSQL(UserTable);
 

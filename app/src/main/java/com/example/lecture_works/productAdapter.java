@@ -24,7 +24,7 @@ public class productAdapter extends RecyclerView.Adapter<productAdapter.ViewHold
     ArrayList<ProductList> arrayList;
 
     SharedPreferences sp;
-    public productAdapter(Product context, ArrayList<ProductList> arrayList) {
+    public productAdapter(Context context, ArrayList<ProductList> arrayList) {
         this.context = context;
         this.arrayList = arrayList;
         sp = context.getSharedPreferences(contantSp.PREF, Context.MODE_PRIVATE);
