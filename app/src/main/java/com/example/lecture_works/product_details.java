@@ -134,7 +134,7 @@ public class product_details extends AppCompatActivity {
 //                sp.edit().putBoolean(contantSp.WISHLIST, false).apply();
                     Toast.makeText(product_details.this, "Removed From WishList", Toast.LENGTH_SHORT).show();
 
-                    String deleteFromWishlist = "DELETE FROM wishlist WHERE product = '" + sp.getInt(contantSp.PRODUCT_ID, 0) + "' AND userid = '" + sp.getString(contantSp.userid, "") + "' ";
+                    String deleteFromWishlist = "DELETE FROM wishlist WHERE productid = '" + sp.getInt(contantSp.PRODUCT_ID, 0) + "' AND userid = '" + sp.getString(contantSp.userid, "") + "' ";
                     db.execSQL(deleteFromWishlist);
 
                     productwishlist.setImageResource(R.drawable.wishlist_empty);
@@ -154,11 +154,11 @@ public class product_details extends AppCompatActivity {
             cart_icon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(product_details.this, "Added To Cart", Toast.LENGTH_SHORT).show();
                     cartTotal++;
                     cart_qty.setText(String.valueOf(cartTotal));
                     cart_layout.setVisibility(View.VISIBLE);
                     cart_icon.setVisibility(View.GONE);
+                    Toast.makeText(product_details.this, "Added To Cart", Toast.LENGTH_SHORT).show();
                 }
             });
 

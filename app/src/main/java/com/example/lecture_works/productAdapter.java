@@ -1,8 +1,11 @@
 package com.example.lecture_works;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,14 +61,14 @@ public class productAdapter extends RecyclerView.Adapter<productAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull productAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ProductList item = arrayList.get(position);
 
         holder.name.setText(item.getProductname());
         holder.image.setImageResource(item.getProductimage());
         holder.disscountprice.setText("₹" + item.getDisscountprice());
         holder.originalprice.setText("₹" + item.getOriginalprice());
-        holder.originalprice.setPaintFlags(holder.originalprice.getPaintFlags() | android.graphics.Paint.STRIKE_THRU_TEXT_FLAG);
+        holder.originalprice.setPaintFlags(holder.originalprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
         if (holder.description != null && item.getDescription() != null) {
             holder.description.setText(item.getDescription());
@@ -90,6 +93,9 @@ public class productAdapter extends RecyclerView.Adapter<productAdapter.ViewHold
                     .putString(contantSp.DESCRIPTION, selected.getDescription())
                     .putString(contantSp.PRODUCT_DISSCOUNT, selected.getProductdiscount())
                     .commit();
+
+//            startActivity(new Intent(productAdapter.this, product_details.class));
+
 
             Intent intent = new Intent(context, product_details.class);
             context.startActivity(intent);
