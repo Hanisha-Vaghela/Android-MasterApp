@@ -26,7 +26,6 @@ public class product_details extends AppCompatActivity {
     TextView cart_qty;
     ImageView cart_icon, cart_minus,cart_add;
     LinearLayout cart_layout;
-
     Button buynow;
     Boolean togglewishlist;
     int cartTotal = 0;
@@ -56,6 +55,9 @@ public class product_details extends AppCompatActivity {
         String wishlistTable = "CREATE TABLE IF NOT EXISTS wishlist (wishlistid INTEGER PRIMARY KEY AUTOINCREMENT, productid INTEGER, userid INTEGER)";
         db.execSQL(wishlistTable);
 
+        String cartTable = "CREATE TABLE IF NOT EXISTS cart (cartid INTEGER PRIMARY KEY AUTOINCREMENT, cart INTEGER, userid INTEGER, productid INTEGER )";
+        db.execSQL(cartTable);
+
         detailimage = findViewById(R.id.product_detail_image);
         productwishlist = findViewById(R.id.product_detail_wishlist);
         productcart = findViewById(R.id.product_detail_cart);
@@ -75,13 +77,13 @@ public class product_details extends AppCompatActivity {
 
         // ahiyan aapde jaate value set akriye chhiye , naa ke arrayList mathi laaviye chhiye ,
         // to jate set karvani hoy tyare default value int mate 0 aapvani hoy and String mate "".
-        int imgRes = sp.getInt(contantSp.PRODUCT_IMG, 0);
+//        int imgRes = sp.getInt(contantSp.PRODUCT_IMG, 0);
 
         detailimage.setImageResource(sp.getInt(contantSp.PRODUCT_IMG, 0));
         productdetailname.setText(sp.getString(contantSp.PRODUCT_NAME, ""));
-        productdiscountprice.setText(sp.getString(contantSp.DISSCOUNT_PRICE, ""));
+        productdiscountprice.setText(String.valueOf(sp.getInt(contantSp.DISSCOUNT_PRICE, 0)));
         productrealprice.setText(String.valueOf(sp.getInt(contantSp.ORIGINAL_PRICE, 0)));
-        productdiscount.setText(String.valueOf(sp.getInt(contantSp.PRODUCT_DISSCOUNT, 0)));
+        productdiscount.setText(sp.getString(contantSp.PRODUCT_DISSCOUNT, ""));
 //        productwishlist.setText(String.valueOf(sp.getInt(contantSp.PRODUCT_DISCOUNT_PRICE, 0)));
 
 
@@ -158,6 +160,10 @@ public class product_details extends AppCompatActivity {
                     cart_qty.setText(String.valueOf(cartTotal));
                     cart_layout.setVisibility(View.VISIBLE);
                     cart_icon.setVisibility(View.GONE);
+
+                    String cartTable = "INSERT INTO cart VALUES(NULL, '" + sp.getInt(contantSp.CART, 0) + "', '" + sp.getString(contantSp.userid, "") + "' ,'" + sp.getString(contantSp.PRODUCT_ID, "") + "'  )";
+                    db.execSQL(cartTable);
+
                     Toast.makeText(product_details.this, "Added To Cart", Toast.LENGTH_SHORT).show();
                 }
             });
@@ -165,11 +171,6 @@ public class product_details extends AppCompatActivity {
         cart_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Toast.makeText(product_details.this, "Decrease To Cart", Toast.LENGTH_SHORT).show();
-//                cartTotal--;
-//                cart_qty.setText(String.valueOf(cartTotal));
-//                cart_layout.setVisibility(View.VISIBLE);
-//                cart_icon.setVisibility(View.GONE);
 
             if(cartTotal > 1){
                 cartTotal--;
@@ -180,7 +181,8 @@ public class product_details extends AppCompatActivity {
                 cart_qty.setText("0");
                 cart_layout.setVisibility(View.GONE);
                 cart_icon.setVisibility(View.VISIBLE);
-
+                String cartTable = "DELETE FROM wishlist WHERE productid = '" + sp.getInt(contantSp.PRODUCT_ID, 0) + "' AND userid = '" + sp.getString(contantSp.userid, "") + "' ";
+                db.execSQL(cartTable);
                 Toast.makeText(product_details.this, "Product Removed from cart", Toast.LENGTH_SHORT).show();
                 }
             }

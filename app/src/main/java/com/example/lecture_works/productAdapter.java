@@ -68,21 +68,21 @@ public class productAdapter extends RecyclerView.Adapter<productAdapter.ViewHold
         holder.image.setImageResource(item.getProductimage());
         holder.disscountprice.setText("₹" + item.getDisscountprice());
         holder.originalprice.setText("₹" + item.getOriginalprice());
-        holder.originalprice.setPaintFlags(holder.originalprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+//        holder.originalprice.setPaintFlags(holder.originalprice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
-        if (holder.description != null && item.getDescription() != null) {
-            holder.description.setText(item.getDescription());
-        }
-
-        if (holder.badge != null && item.getProductdiscount() != null && !item.getProductdiscount().isEmpty()) {
-            holder.badge.setText(item.getProductdiscount());
-            holder.badge.setVisibility(View.VISIBLE);
-        }
+//        if (holder.description != null && item.getDescription() != null) {
+//            holder.description.setText(item.getDescription());
+//        }
+//
+//        if (holder.badge != null && item.getProductdiscount() != null && !item.getProductdiscount().isEmpty()) {
+//            holder.badge.setText(item.getProductdiscount());
+//            holder.badge.setVisibility(View.VISIBLE);
+//        }
 
         holder.itemView.setOnClickListener(view -> {
-            int pos = holder.getAdapterPosition();
-            if (pos == RecyclerView.NO_POSITION) return;
-            ProductList selected = arrayList.get(pos);
+//            int pos = holder.getAdapterPosition();
+//            if (pos == RecyclerView.NO_POSITION) return;
+            ProductList selected = arrayList.get(position);
 
             sp.edit()
                     .putInt(contantSp.PRODUCT_ID, selected.getProductid())

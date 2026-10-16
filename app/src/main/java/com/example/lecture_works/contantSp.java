@@ -18,6 +18,8 @@ public class contantSp {
     public static final String DISSCOUNT_PRICE ="disscount_price";
     public static final String PRODUCT_DISSCOUNT ="product_discount";
     public static final String DESCRIPTION ="description";
+
+    public static final String CART = "cart";
     public static final String WISHLIST ="wishlist";
 
 }
