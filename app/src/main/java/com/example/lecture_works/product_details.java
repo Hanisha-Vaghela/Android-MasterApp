@@ -117,7 +117,7 @@ public class product_details extends AppCompatActivity {
 //            sp.edit().putBoolean(contantSp.WISHLIST, false).apply();
 //        }
         /// end discount
-        String checkWishlist = "SELECT * FROM wishlist WHERE productid = '"+sp.getInt(contantSp.PRODUCT_ID, 0)+"' AND userid = '"+sp.getString(contantSp.userid, "")+"'";
+        String checkWishlist = "SELECT * FROM wishlist WHERE productid = '"+sp.getInt(contantSp.PRODUCT_ID, 0)+"' AND userid = '"+sp.getInt(contantSp.userid, 0)+"'";
         Cursor cursor = db.rawQuery(checkWishlist, null);
 
         if (cursor.getCount()>0) {
@@ -136,7 +136,7 @@ public class product_details extends AppCompatActivity {
 //                sp.edit().putBoolean(contantSp.WISHLIST, false).apply();
                     Toast.makeText(product_details.this, "Removed From WishList", Toast.LENGTH_SHORT).show();
 
-                    String deleteFromWishlist = "DELETE FROM wishlist WHERE productid = '" + sp.getInt(contantSp.PRODUCT_ID, 0) + "' AND userid = '" + sp.getString(contantSp.userid, "") + "' ";
+                    String deleteFromWishlist = "DELETE FROM wishlist WHERE productid = '" + sp.getInt(contantSp.PRODUCT_ID, 0) + "' AND userid = '" + sp.getInt(contantSp.userid, 0) + "' ";
                     db.execSQL(deleteFromWishlist);
 
                     productwishlist.setImageResource(R.drawable.wishlist_empty);
@@ -145,7 +145,7 @@ public class product_details extends AppCompatActivity {
 //                sp.edit().putBoolean(contantSp.WISHLIST, true).apply();
                     Toast.makeText(product_details.this, "Product added to wishlist", Toast.LENGTH_SHORT).show();
 
-                    String insertInWishlist = "INSERT INTO wishlist VALUES(NULL, '" + sp.getInt(contantSp.PRODUCT_ID, 0) + "', '" + sp.getString(contantSp.userid, "") + "'  )";
+                    String insertInWishlist = "INSERT INTO wishlist VALUES(NULL, '" + sp.getInt(contantSp.PRODUCT_ID, 0) + "', '" + sp.getInt(contantSp.userid, 0) + "'  )";
                     db.execSQL(insertInWishlist);
 
                     productwishlist.setImageResource(R.drawable.wishlist_fill);
@@ -161,14 +161,22 @@ public class product_details extends AppCompatActivity {
                     cart_layout.setVisibility(View.VISIBLE);
                     cart_icon.setVisibility(View.GONE);
 
-                    String cartTable = "INSERT INTO cart VALUES(NULL, '" + sp.getInt(contantSp.CART, 0) + "', '" + sp.getString(contantSp.userid, "") + "' ,'" + sp.getString(contantSp.PRODUCT_ID, "") + "'  )";
+                    String cartTable = "INSERT INTO cart VALUES(NULL, '" + sp.getInt(contantSp.CART, 0) + "', '" + sp.getInt(contantSp.userid, 0) + "' ,'" + sp.getInt(contantSp.PRODUCT_ID, 0) + "'  )";
                     db.execSQL(cartTable);
 
                     Toast.makeText(product_details.this, "Added To Cart", Toast.LENGTH_SHORT).show();
                 }
             });
 
-        cart_icon.setOnClickListener(new View.OnClickListener() {
+            cart_add.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+//                    cartTotal++;
+                    cart_qty.setText(String.valueOf(cartTotal));
+
+                }
+            });
+        cart_minus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -181,7 +189,7 @@ public class product_details extends AppCompatActivity {
                 cart_qty.setText("0");
                 cart_layout.setVisibility(View.GONE);
                 cart_icon.setVisibility(View.VISIBLE);
-                String cartTable = "DELETE FROM wishlist WHERE productid = '" + sp.getInt(contantSp.PRODUCT_ID, 0) + "' AND userid = '" + sp.getString(contantSp.userid, "") + "' ";
+                String cartTable = "DELETE FROM wishlist WHERE productid = '" + sp.getInt(contantSp.PRODUCT_ID, 0) + "' AND userid = '" + sp.getInt(contantSp.userid, 0) + "' ";
                 db.execSQL(cartTable);
                 Toast.makeText(product_details.this, "Product Removed from cart", Toast.LENGTH_SHORT).show();
                 }
