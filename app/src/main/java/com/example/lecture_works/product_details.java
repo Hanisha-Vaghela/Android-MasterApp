@@ -171,11 +171,14 @@ public class product_details extends AppCompatActivity {
             cart_add.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    cartTotal++;
+                    cartTotal++;
                     cart_qty.setText(String.valueOf(cartTotal));
+//                    String updateTable = "UPDATE cart SET quantity = " + cartTotal +" WHERE productid = '" + sp.getInt(contantSp.PRODUCT_ID, 0) + "' AND userid = '" + sp.getInt(contantSp.userid, 0) + "' ";
+//                    db.execSQL(updateTable);
 
                 }
             });
+
         cart_minus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -183,13 +186,16 @@ public class product_details extends AppCompatActivity {
             if(cartTotal > 1){
                 cartTotal--;
                 cart_qty.setText(String.valueOf(cartTotal));
+//                String updateTable = "UPDATE cart SET quantity = " + cartTotal +" WHERE productid = '" + sp.getInt(contantSp.PRODUCT_ID, 0) + "' AND userid = '" + sp.getInt(contantSp.userid, 0) + "' ";
+//                db.execSQL(updateTable);
+
                 Toast.makeText(product_details.this, "Decrease To Cart", Toast.LENGTH_SHORT).show();
                 }else {
                 cartTotal = 0;
                 cart_qty.setText("0");
                 cart_layout.setVisibility(View.GONE);
                 cart_icon.setVisibility(View.VISIBLE);
-                String cartTable = "DELETE FROM wishlist WHERE productid = '" + sp.getInt(contantSp.PRODUCT_ID, 0) + "' AND userid = '" + sp.getInt(contantSp.userid, 0) + "' ";
+                String cartTable = "DELETE FROM cart WHERE productid = '" + sp.getInt(contantSp.PRODUCT_ID, 0) + "' AND userid = '" + sp.getInt(contantSp.userid, 0) + "' ";
                 db.execSQL(cartTable);
                 Toast.makeText(product_details.this, "Product Removed from cart", Toast.LENGTH_SHORT).show();
                 }
