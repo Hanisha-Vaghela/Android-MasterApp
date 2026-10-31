@@ -186,8 +186,6 @@ public class product_details extends AppCompatActivity {
             if(cartTotal > 1){
                 cartTotal--;
                 cart_qty.setText(String.valueOf(cartTotal));
-//                String updateTable = "UPDATE cart SET quantity = " + cartTotal +" WHERE productid = '" + sp.getInt(contantSp.PRODUCT_ID, 0) + "' AND userid = '" + sp.getInt(contantSp.userid, 0) + "' ";
-//                db.execSQL(updateTable);
 
                 Toast.makeText(product_details.this, "Decrease To Cart", Toast.LENGTH_SHORT).show();
                 }else {
