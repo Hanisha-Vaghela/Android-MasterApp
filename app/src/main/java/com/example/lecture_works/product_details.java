@@ -1,9 +1,11 @@
 package com.example.lecture_works;
 
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -17,7 +19,13 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class product_details extends AppCompatActivity {
+import com.razorpay.Checkout;
+import com.razorpay.PaymentData;
+import com.razorpay.PaymentResultWithDataListener;
+
+import org.json.JSONObject;
+
+public class product_details extends AppCompatActivity implements PaymentResultWithDataListener {
 
     ImageView detailimage,productwishlist,productcart;
     TextView productdetailname,productdiscountprice,productrealprice,productdiscount;
@@ -26,7 +34,7 @@ public class product_details extends AppCompatActivity {
     TextView cart_qty;
     ImageView cart_icon, cart_minus,cart_add;
     LinearLayout cart_layout;
-    Button buynow;
+    Button buynow,pay_now;
     Boolean togglewishlist;
     int cartTotal = 0;
     SQLiteDatabase db;
@@ -66,6 +74,9 @@ public class product_details extends AppCompatActivity {
         productrealprice = findViewById(R.id.product_detail_realprice);
         productdiscount = findViewById(R.id.product_detail_discount);
         buynow = findViewById(R.id.buy_now);
+
+//      payment
+        pay_now = findViewById(R.id.pay_now);
 
 //        cart
 
@@ -173,6 +184,7 @@ public class product_details extends AppCompatActivity {
                 public void onClick(View v) {
                     cartTotal++;
                     cart_qty.setText(String.valueOf(cartTotal));
+
 //                    String updateTable = "UPDATE cart SET quantity = " + cartTotal +" WHERE productid = '" + sp.getInt(contantSp.PRODUCT_ID, 0) + "' AND userid = '" + sp.getInt(contantSp.userid, 0) + "' ";
 //                    db.execSQL(updateTable);
 
@@ -200,5 +212,50 @@ public class product_details extends AppCompatActivity {
             }
         });
 
+
+        pay_now.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startPayment();
+            }
+        });
+    }
+
+    private void startPayment() {
+        final Activity activity = this;
+        Checkout checkout = new Checkout();
+        checkout.setKeyID("rzp_test_rGhSnxMQBMXmfL");
+
+        try {
+            JSONObject options = new JSONObject();
+            options.put("name", getResources().getString(R.string.app_name));
+            options.put("description", "Purchase Deal From " + getResources().getString(R.string.app_name));
+            options.put("send_sms_hash", true);
+            options.put("allow_rotation", true);
+            //You can omit the image option to fetch the image from dashboard
+            options.put("image", R.mipmap.ic_launcher);
+            options.put("currency", "INR");
+            options.put("amount", String.valueOf(Integer.parseInt(sp.getString(contantSp.ORIGINAL_PRICE,"")) * 100));
+
+            JSONObject preFill = new JSONObject();
+            preFill.put("email", "hemilgarala@gmail.com");
+            preFill.put("contact", "9638221084");
+            options.put("prefill", preFill);
+
+            checkout.open(activity, options);
+
+        } catch(Exception e) {
+            Log.e("RESPONSE", "Error in starting Razorpay Checkout", e);
+        }
+    }
+
+    @Override
+    public void onPaymentSuccess(String s, PaymentData paymentData) {
+        Toast.makeText(this, "Payment Successfull", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onPaymentError(int i, String s, PaymentData paymentData) {
+        Toast.makeText(this, "payment Failed", Toast.LENGTH_SHORT).show();
     }
 }

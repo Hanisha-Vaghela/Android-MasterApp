@@ -152,7 +152,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Buy Now"
-                android:textColor="#FFFFFF"
+                android:backgroundTint="#1976D2" />
+            <Button
+                android:id="@+id/pay_now"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Pay Now"
                 android:backgroundTint="#1976D2" />
 
         </LinearLayout>
