@@ -248,7 +248,7 @@ public class product_details extends AppCompatActivity implements PaymentResultW
             Log.e("RESPONSE", "Error in starting Razorpay Checkout", e);
         }
     }
-
+//payment
     @Override
     public void onPaymentSuccess(String s, PaymentData paymentData) {
         Toast.makeText(this, "Payment Successfull", Toast.LENGTH_SHORT).show();
