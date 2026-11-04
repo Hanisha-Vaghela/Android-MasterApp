@@ -27,6 +27,8 @@ public class productAdapter extends RecyclerView.Adapter<productAdapter.ViewHold
     ArrayList<ProductList> arrayList;
 
     SharedPreferences sp;
+//    boolean iswidhlist = false;
+
     public productAdapter(Context context, ArrayList<ProductList> arrayList) {
         this.context = context;
         this.arrayList = arrayList;

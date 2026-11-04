@@ -18,6 +18,7 @@ public class ProductActivity extends AppCompatActivity {
     SQLiteDatabase db;
     ArrayList<ProductList> arrayList;
     SharedPreferences sp;
+
     int[] productidArray = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22};
     int[] SubCatidArray  = {6,6,6,2,2,5,11,11,10,10,6,1,3,4,11,8,7,7,3,1,1,9};
 
@@ -141,6 +142,9 @@ public class ProductActivity extends AppCompatActivity {
         String productTable = "CREATE TABLE IF NOT EXISTS product(productid INTEGER PRIMARY KEY AUTOINCREMENT, subcategoryid INTEGER, name VARCHAR(50), image VARCHAR, discountprice VARCHAR(10), originalprice VARCHAR(10))";
         db.execSQL(productTable);
 
+        String wishlistTable = "CREATE TABLE IF NOT EXISTS wishlist(wishlistid INTEGER PRIMARY KEY AUTOINCREMENT, productid INTEGER ,userid INTEGER)";
+        db.execSQL(wishlistTable);
+
         product = findViewById(R.id.productRV);
 
         for (int i = 0; i < productidArray.length; i++) {
@@ -198,6 +202,7 @@ public class ProductActivity extends AppCompatActivity {
 
         product.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
 
+//        productAdapter adapter = new productAdapter(ProductActivity.this, arrayList);
         productAdapter adapter = new productAdapter(ProductActivity.this, arrayList);
         product.setAdapter(adapter);
 

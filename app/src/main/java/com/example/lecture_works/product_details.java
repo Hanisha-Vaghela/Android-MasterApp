@@ -173,6 +173,7 @@ public class product_details extends AppCompatActivity {
                 public void onClick(View v) {
                     cartTotal++;
                     cart_qty.setText(String.valueOf(cartTotal));
+
 //                    String updateTable = "UPDATE cart SET quantity = " + cartTotal +" WHERE productid = '" + sp.getInt(contantSp.PRODUCT_ID, 0) + "' AND userid = '" + sp.getInt(contantSp.userid, 0) + "' ";
 //                    db.execSQL(updateTable);
 

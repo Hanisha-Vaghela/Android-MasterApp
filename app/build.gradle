@@ -34,8 +34,10 @@ android {
 }
 
 dependencies {
+    implementation("com.intuit.sdp:sdp-android:1.1.1")
     implementation 'com.intuit.sdp:sdp-android:1.1.1'
     implementation 'com.github.bumptech.glide:glide:5.0.9'
+    implementation("com.razorpay:checkout:1.6.40")
     implementation libs.appcompat
     implementation libs.material
     implementation libs.activity
