@@ -31,26 +31,30 @@ public class splashScreen extends AppCompatActivity {
 //        },1000);
 
 
-        sp = getSharedPreferences(contantSp.PREF, MODE_PRIVATE);
+//        sp = getSharedPreferences(contantSp.PREF, MODE_PRIVATE);
 
         image = findViewById(R.id.imageView);
-        Glide.with(splashScreen.this)
-                .load("https://search.brave.com/images?q=gif")
-                .placeholder(R.mipmap.ic_launcher).into(image);
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (sp.getInt(contantSp.userid, 0) == 0){
-                    startActivity(new Intent(splashScreen.this, MainActivity.class));
-                    finish();
-                }
-                else{
-                    startActivity(new Intent(splashScreen.this, dashboard.class));
-                    finish();
-                }
+//                if (sp.getInt(contantSp.userid, 0) == 0){
 //                    startActivity(new Intent(splashScreen.this, MainActivity.class));
 //                    finish();
-        }},1000);
+//                }
+//                else{
+//                    startActivity(new Intent(splashScreen.this, dashboard.class));
+//                    finish();
+//                }
+                    startActivity(new Intent(splashScreen.this, MainActivity.class));
+                    finish();
+        }},3000);
+
+        String imageurl = "https://ugokawaii.com/wp-content/uploads/2022/12/left-arrow.gif";
+        Glide.with(this)
+                .load(imageurl)
+                .placeholder(R.mipmap.ic_launcher)
+                .into(image);
     }
 
 }

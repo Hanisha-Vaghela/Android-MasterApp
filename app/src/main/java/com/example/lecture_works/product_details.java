@@ -38,6 +38,8 @@ public class product_details extends AppCompatActivity implements PaymentResultW
     Boolean togglewishlist;
     int cartTotal = 0;
     SQLiteDatabase db;
+    int TotalPrice = 0;
+    int iPrice = 0;
     SharedPreferences sp;
 
 
@@ -65,7 +67,7 @@ public class product_details extends AppCompatActivity implements PaymentResultW
         String wishlistTable = "CREATE TABLE IF NOT EXISTS wishlist (wishlistid INTEGER PRIMARY KEY AUTOINCREMENT, productid INTEGER, userid INTEGER)";
         db.execSQL(wishlistTable);
 
-        String cartTable = "CREATE TABLE IF NOT EXISTS cart (cartid INTEGER PRIMARY KEY AUTOINCREMENT, cart INTEGER, userid INTEGER, productid INTEGER,iPrice, iTotalPrice )";
+        String cartTable = "CREATE TABLE IF NOT EXISTS cart (cartid INTEGER PRIMARY KEY AUTOINCREMENT, userid INTEGER, productid INTEGER,cart_qty INTEGER,iPrice INTEGER, iTotalPrice INTEGER)";
         db.execSQL(cartTable);
 
         detailimage = findViewById(R.id.product_detail_image);
@@ -74,6 +76,7 @@ public class product_details extends AppCompatActivity implements PaymentResultW
         productdetailname = findViewById(R.id.product_detail_name);
         productdiscountprice = findViewById(R.id.product_detail_discountprice);
         productrealprice = findViewById(R.id.product_detail_realprice);
+        iPrice = sp.getInt(contantSp.ORIGINAL_PRICE, 0);
         productdiscount = findViewById(R.id.product_detail_discount);
         buynow = findViewById(R.id.buy_now);
 
@@ -181,15 +184,25 @@ public class product_details extends AppCompatActivity implements PaymentResultW
 //                }
 //            });
 
+        Cursor cartCursor = db.rawQuery("SELECT cart_qty FROM cart WHERE productid = "
+                + sp.getInt(contantSp.PRODUCT_ID, 0) + " AND userid = " + sp.getInt(contantSp.userid, 0), null);
+        if (cartCursor.moveToFirst()) {
+            cartTotal = cartCursor.getInt(0);
+            cart_qty.setText(String.valueOf(cartTotal));
+            cart_icon.setVisibility(View.GONE);
+            cart_layout.setVisibility(View.VISIBLE);
+        }
+        cartCursor.close();
+
 
         cart_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 cartTotal = 1;
-                int iPrice = sp.getInt(contantSp.ORIGINAL_PRICE,0);
-                int iTotalPrice = cartTotal*iPrice;
+                iPrice = sp.getInt(contantSp.ORIGINAL_PRICE,0);
+                TotalPrice = cartTotal*iPrice;
 
-                String insertCartQuery = "INSERT INTO cart VALUES(NULL,'"+sp.getInt(contantSp.userid, 0)+"','"+sp.getInt(contantSp.PRODUCT_ID, 0)+"','"+cartTotal+"','"+iPrice+"','"+iTotalPrice+"')";
+                String insertCartQuery = "INSERT INTO cart VALUES(NULL,'"+sp.getInt(contantSp.userid, 0)+"','"+sp.getInt(contantSp.PRODUCT_ID, 0)+"','"+cartTotal+"','"+iPrice+"','"+TotalPrice+"')";
                 db.execSQL(insertCartQuery);
                 Toast.makeText(product_details.this, "Added To Cart", Toast.LENGTH_SHORT).show();
                 cart_icon.setVisibility(View.GONE);
@@ -202,8 +215,9 @@ public class product_details extends AppCompatActivity implements PaymentResultW
                 @Override
                 public void onClick(View v) {
                     cartTotal++;
-                    updateMethod(cartTotal,"Upadate");
+                    updateMethod(cartTotal,"Update");
                     cart_qty.setText(String.valueOf(cartTotal));
+                    TotalPrice = cartTotal * iPrice;
                     Toast.makeText(product_details.this, "Update Cart", Toast.LENGTH_SHORT).show();
 
 //                    String updateTable = "UPDATE cart SET quantity = " + cartTotal +" WHERE productid = '" + sp.getInt(contantSp.PRODUCT_ID, 0) + "' AND userid = '" + sp.getInt(contantSp.userid, 0) + "' ";
@@ -223,15 +237,16 @@ public class product_details extends AppCompatActivity implements PaymentResultW
 
                 Toast.makeText(product_details.this, "Decrease To Cart", Toast.LENGTH_SHORT).show();
                 }else {
-//                cartTotal = 0;
-//                cart_qty.setText("0");
+                cartTotal = 0;
+                cart_qty.setText("0");
                 updateMethod(cartTotal,"delete");
                 cart_layout.setVisibility(View.GONE);
                 cart_icon.setVisibility(View.VISIBLE);
-                String cartTable = "DELETE FROM cart WHERE productid = '" + sp.getInt(contantSp.PRODUCT_ID, 0) + "' AND userid = '" + sp.getInt(contantSp.userid, 0) + "' ";
-                db.execSQL(cartTable);
+//                String cartTable = "DELETE FROM cart WHERE productid = '" + sp.getInt(contantSp.PRODUCT_ID, 0) + "' AND userid = '" + sp.getInt(contantSp.userid, 0) + "' ";
+//                db.execSQL(cartTable);
                 Toast.makeText(product_details.this, "Product Removed from cart", Toast.LENGTH_SHORT).show();
                 }
+                TotalPrice = cartTotal * iPrice;
             }
         });
 
@@ -246,13 +261,36 @@ public class product_details extends AppCompatActivity implements PaymentResultW
         });
     }
 
-    private void updateMethod(int iqty, String upadate) {
+//    private void updateMethod(int cartTotal, String type) {
+//        if(type.equalsIgnoreCase("Update")){
+//            String updateCart = "UPDATE cart SET cart_qty = '"+cart_qty+"' , totalPrice = '"+TotalPrice+"' WHERE productid = '"+sp.getInt(contantSp.PRODUCT_ID,0)+"'  AND userid = '"+ sp.getInt(contantSp.userid,0)+"'  ";
+//            db.execSQL(updateCart);
+//        }
+//
+//        if(type.equalsIgnoreCase("delete")){
+//            String deleteCart = "DELETE FROM cart WHERE productid = '"+sp.getString(contantSp.PRODUCT_ID,"")+"' AND userid = '"+sp.getString(contantSp.userid,"")+"'";
+//            db.execSQL(deleteCart);
+//        }
+//    }
+private void updateMethod(int qty, String type) {
+    int productId = sp.getInt(contantSp.PRODUCT_ID, 0);
+    int userId = sp.getInt(contantSp.userid, 0);
+
+    if (type.equalsIgnoreCase("update")) {
+        int total = qty * iPrice;
+        db.execSQL("UPDATE cart SET cart_qty = " + qty + ", iTotalPrice = " + total
+                + " WHERE productid = " + productId + " AND userid = " + userId);
     }
+
+    if (type.equalsIgnoreCase("delete")) {
+        db.execSQL("DELETE FROM cart WHERE productid = " + productId + " AND userid = " + userId);
+    }
+}
 
     private void startPayment() {
         final Activity activity = this;
         Checkout checkout = new Checkout();
-        checkout.setKeyID("rzp_test_rGhSnxMQBMXmfL");
+        checkout.setKeyID("rzp_test_Tw5HjZUqHF5GDt");
 
         try {
             JSONObject options = new JSONObject();
@@ -263,7 +301,7 @@ public class product_details extends AppCompatActivity implements PaymentResultW
             //You can omit the image option to fetch the image from dashboard
             options.put("image", R.mipmap.ic_launcher);
             options.put("currency", "INR");
-            options.put("amount", String.valueOf(Integer.parseInt(sp.getString(contantSp.ORIGINAL_PRICE,"")) * 100));
+            options.put("amount", String.valueOf(sp.getInt(contantSp.DISSCOUNT_PRICE,0) * 100));
 
             JSONObject preFill = new JSONObject();
             preFill.put("email", "prajaptismit28@gmail.com");
