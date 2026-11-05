@@ -18,7 +18,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 public class dashboard extends AppCompatActivity {
 
-    Button delete,logout,profile,category;
+    Button delete,logout,profile,category,wishlist;
 
     TextView welcome;
     SQLiteDatabase db;
@@ -39,6 +39,7 @@ public class dashboard extends AppCompatActivity {
         profile = findViewById(R.id.dashboard_profile);
         welcome = findViewById(R.id.dashboard_welcome);
         category = findViewById(R.id.dashboard_category);
+        wishlist = findViewById(R.id.dashboard_wishlist);
 
         welcome.setText("Welcome" +sp.getString(contantSp.name,""));
 
@@ -63,6 +64,9 @@ public class dashboard extends AppCompatActivity {
             category.setOnClickListener(View -> {
                 startActivity(new Intent(dashboard.this,category.class));
             });
+            wishlist.setOnClickListener(View -> {
+                startActivity(new Intent(dashboard.this,wishlist.class));
+        });
 
     }
 }

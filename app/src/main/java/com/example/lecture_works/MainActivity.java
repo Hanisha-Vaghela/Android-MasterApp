@@ -61,19 +61,21 @@ public class MainActivity extends AppCompatActivity {
 
                 String existUser = "SELECT * FROM user WHERE email = '"+email_text+"' AND password='"+pass_text+"' ";
                 Cursor cursor = db.rawQuery(existUser,null);
-                if(cursor.moveToFirst()){
-                    sp.edit()
-                            .putInt(contantSp.userid,cursor.getInt(0))
-                            .putString(contantSp.name,cursor.getString(1))
-                            .putString(contantSp.email,cursor.getString(2))
-                            .putString(contantSp.contact,cursor.getString(3))
-                            .putString(contantSp.password,cursor.getString(4))
+                if(cursor.getCount() > 0 ){
+                    while (cursor.moveToNext()){
+                        sp.edit()
+                                .putInt(contantSp.userid,cursor.getInt(0))
+                                .putString(contantSp.name,cursor.getString(1))
+                                .putString(contantSp.email,cursor.getString(2))
+                                .putString(contantSp.contact,cursor.getString(3))
+                                .putString(contantSp.password,cursor.getString(4))
 
-                            .apply();
-                    Toast.makeText(this, "welcome again", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(MainActivity.this, dashboard.class));
-                    finish();
+                                .apply();
 
+                        Toast.makeText(this, "welcome again", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(MainActivity.this, dashboard.class));
+                        finish();
+                    }
                 }
                 else{
 

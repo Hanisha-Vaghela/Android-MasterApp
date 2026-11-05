@@ -40,6 +40,8 @@ public class product_details extends AppCompatActivity implements PaymentResultW
     SQLiteDatabase db;
     SharedPreferences sp;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +65,7 @@ public class product_details extends AppCompatActivity implements PaymentResultW
         String wishlistTable = "CREATE TABLE IF NOT EXISTS wishlist (wishlistid INTEGER PRIMARY KEY AUTOINCREMENT, productid INTEGER, userid INTEGER)";
         db.execSQL(wishlistTable);
 
-        String cartTable = "CREATE TABLE IF NOT EXISTS cart (cartid INTEGER PRIMARY KEY AUTOINCREMENT, cart INTEGER, userid INTEGER, productid INTEGER )";
+        String cartTable = "CREATE TABLE IF NOT EXISTS cart (cartid INTEGER PRIMARY KEY AUTOINCREMENT, cart INTEGER, userid INTEGER, productid INTEGER,iPrice, iTotalPrice )";
         db.execSQL(cartTable);
 
         detailimage = findViewById(R.id.product_detail_image);
@@ -164,26 +166,45 @@ public class product_details extends AppCompatActivity implements PaymentResultW
                 }
             }
         });
-            cart_icon.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    cartTotal++;
-                    cart_qty.setText(String.valueOf(cartTotal));
-                    cart_layout.setVisibility(View.VISIBLE);
-                    cart_icon.setVisibility(View.GONE);
+//            cart_icon.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    cartTotal++;
+//                    cart_qty.setText(String.valueOf(cartTotal));
+//                    cart_layout.setVisibility(View.VISIBLE);
+//                    cart_icon.setVisibility(View.GONE);
+//
+//                    String cartTable = "INSERT INTO cart VALUES(NULL, '" + sp.getInt(contantSp.CART, 0) + "', '" + sp.getInt(contantSp.userid, 0) + "' ,'" + sp.getInt(contantSp.PRODUCT_ID, 0) + "'  )";
+//                    db.execSQL(cartTable);
+//
+//                    Toast.makeText(product_details.this, "Added To Cart", Toast.LENGTH_SHORT).show();
+//                }
+//            });
 
-                    String cartTable = "INSERT INTO cart VALUES(NULL, '" + sp.getInt(contantSp.CART, 0) + "', '" + sp.getInt(contantSp.userid, 0) + "' ,'" + sp.getInt(contantSp.PRODUCT_ID, 0) + "'  )";
-                    db.execSQL(cartTable);
 
-                    Toast.makeText(product_details.this, "Added To Cart", Toast.LENGTH_SHORT).show();
-                }
-            });
+        cart_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cartTotal = 1;
+                int iPrice = sp.getInt(contantSp.ORIGINAL_PRICE,0);
+                int iTotalPrice = cartTotal*iPrice;
+
+                String insertCartQuery = "INSERT INTO cart VALUES(NULL,'"+sp.getInt(contantSp.userid, 0)+"','"+sp.getInt(contantSp.PRODUCT_ID, 0)+"','"+cartTotal+"','"+iPrice+"','"+iTotalPrice+"')";
+                db.execSQL(insertCartQuery);
+                Toast.makeText(product_details.this, "Added To Cart", Toast.LENGTH_SHORT).show();
+                cart_icon.setVisibility(View.GONE);
+                cart_layout.setVisibility(View.VISIBLE);
+                cart_qty.setText(String.valueOf(cartTotal));
+            }
+        });
 
             cart_add.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     cartTotal++;
+                    updateMethod(cartTotal,"Upadate");
                     cart_qty.setText(String.valueOf(cartTotal));
+                    Toast.makeText(product_details.this, "Update Cart", Toast.LENGTH_SHORT).show();
 
 //                    String updateTable = "UPDATE cart SET quantity = " + cartTotal +" WHERE productid = '" + sp.getInt(contantSp.PRODUCT_ID, 0) + "' AND userid = '" + sp.getInt(contantSp.userid, 0) + "' ";
 //                    db.execSQL(updateTable);
@@ -197,12 +218,14 @@ public class product_details extends AppCompatActivity implements PaymentResultW
 
             if(cartTotal > 1){
                 cartTotal--;
+                updateMethod(cartTotal,"update");
                 cart_qty.setText(String.valueOf(cartTotal));
 
                 Toast.makeText(product_details.this, "Decrease To Cart", Toast.LENGTH_SHORT).show();
                 }else {
-                cartTotal = 0;
-                cart_qty.setText("0");
+//                cartTotal = 0;
+//                cart_qty.setText("0");
+                updateMethod(cartTotal,"delete");
                 cart_layout.setVisibility(View.GONE);
                 cart_icon.setVisibility(View.VISIBLE);
                 String cartTable = "DELETE FROM cart WHERE productid = '" + sp.getInt(contantSp.PRODUCT_ID, 0) + "' AND userid = '" + sp.getInt(contantSp.userid, 0) + "' ";
@@ -213,12 +236,17 @@ public class product_details extends AppCompatActivity implements PaymentResultW
         });
 
 
+//payment
+
         pay_now.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startPayment();
             }
         });
+    }
+
+    private void updateMethod(int iqty, String upadate) {
     }
 
     private void startPayment() {
@@ -238,8 +266,8 @@ public class product_details extends AppCompatActivity implements PaymentResultW
             options.put("amount", String.valueOf(Integer.parseInt(sp.getString(contantSp.ORIGINAL_PRICE,"")) * 100));
 
             JSONObject preFill = new JSONObject();
-            preFill.put("email", "hemilgarala@gmail.com");
-            preFill.put("contact", "9638221084");
+            preFill.put("email", "prajaptismit28@gmail.com");
+            preFill.put("contact", "9016019086");
             options.put("prefill", preFill);
 
             checkout.open(activity, options);
